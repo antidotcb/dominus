@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Dominus</string>
+    <string name="mm_newgame">New game</string>
+    <string name="mm_loadgame">Load game</string>
+    <string name="mm_savegame">Save game</string>
+    <string name="mm_exitgame">Exit game</string>
+    
+    <string name="gm_planets">Planets</string>
 </resources>

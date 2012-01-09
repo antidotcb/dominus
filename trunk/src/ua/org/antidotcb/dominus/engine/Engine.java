@@ -34,20 +34,18 @@ public final class Engine {
 	
 	public void CreateNew(AbstractUniverseBuilder builder) {
 		Log.i(Engine.eTag, this.getClass() + " creating new universe using " + builder.getClass());
-		universe = builder.CreateUniverse();
-		races = builder.CreateRaces();
+		data.setUniverse(builder.CreateUniverse());
+		data.setRaces(builder.CreateRaces());
 	}
 
 	public ArrayList<Race> getRaces () {
-		return races;
+		return data.getRaces();
 	}
 
 	public Universe getUniverse() {
-		return universe;
+		return data.getUniverse();
 	}
 
-	private ArrayList<Race> races;
-
-	private Universe universe;
+	private GameData data = new GameData();
 
 }

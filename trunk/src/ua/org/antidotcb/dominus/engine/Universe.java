@@ -115,7 +115,7 @@ public class Universe {
 		return (starSystems);
 	}
 
-	public ArrayList<Pair<StarSystem, StarSystem>> getLinks() {
+	public final ArrayList<Pair<StarSystem, StarSystem>> getLinks() {
 		return links;
 	}
 

@@ -1,11 +1,28 @@
 package ua.org.antidotcb.dominus.engine;
 
+import ua.org.antidotcb.dominus.model.GameProviderMetaData.GameTableMetaData;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+
 import java.util.ArrayList;
 
 public class GameDatabaseLoader implements GameDataProvider {
 
+	private Cursor	cursor;
+
+	public GameDatabaseLoader(Context content, Uri initialUri) {
+		ContentResolver cr = content.getContentResolver();
+		Uri uri = GameTableMetaData.CONTENT_URI;
+		if (initialUri != null) {
+			uri = initialUri;
+		}
+		cursor = cr.query(uri, null, null, null, null);
+	}
+
 	public ArrayList<Race> getRaces() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -16,7 +33,11 @@ public class GameDatabaseLoader implements GameDataProvider {
 
 	public void Save() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public void Close() {
+		cursor.close();
 	}
 
 }

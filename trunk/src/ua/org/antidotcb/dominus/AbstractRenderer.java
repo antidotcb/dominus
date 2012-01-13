@@ -48,10 +48,8 @@ public abstract class AbstractRenderer implements Renderer {
 		gl.glDisable(GL10.GL_DITHER);
 		gl.glEnable(GL10.GL_BLEND);
 
-		/*
-		 * Some one-time OpenGL initialization can be made here
-		 * probably based on features of this particular context
-		 */
+		/* Some one-time OpenGL initialization can be made here probably based
+		 * on features of this particular context */
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);
 
 		gl.glHint(GL10.GL_POINT_SMOOTH_HINT, GL10.GL_NICEST);

@@ -43,10 +43,10 @@ public class DefaultUniverseRenderer extends AbstractRenderer implements Rendere
 			vertexBuffer.put(starSystem.getZ());
 
 			int color = starSystem.getColor();
-			float a = (float) Color.alpha(color) / 255.0f;
-			float r = (float) Color.red(color) / 255.0f;
-			float g = (float) Color.green(color) / 255.0f;
-			float b = (float) Color.blue(color) / 255.0f;
+			float a = Color.alpha(color) / 255.0f;
+			float r = Color.red(color) / 255.0f;
+			float g = Color.green(color) / 255.0f;
+			float b = Color.blue(color) / 255.0f;
 
 			colorBuffer.put(r);
 			colorBuffer.put(g);

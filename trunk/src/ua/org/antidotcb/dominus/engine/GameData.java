@@ -3,11 +3,10 @@ package ua.org.antidotcb.dominus.engine;
 import java.util.ArrayList;
 
 public class GameData implements GameDataProvider {
-	private ArrayList<Race> races;
-	private Universe universe;
+	private ArrayList<Race>	races;
+	private Universe		universe;
 
-	public GameData() {
-	}
+	public GameData() {}
 
 	public ArrayList<Race> getRaces() {
 		return races;
@@ -26,6 +25,6 @@ public class GameData implements GameDataProvider {
 	}
 
 	public void Save() {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 	}
 }

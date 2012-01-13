@@ -1,7 +1,7 @@
 package ua.org.antidotcb.dominus.model;
 
-import java.util.HashMap;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData.GameTableMetaData;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -13,8 +13,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
+
+import java.util.HashMap;
 
 public class GameProvider extends ContentProvider {
 
@@ -27,29 +30,23 @@ public class GameProvider extends ContentProvider {
 	private static final String				UNKNOWN_URI_ERROR							= "Unknown URI %s";
 
 	// helper TAG for logging
-	private static final String				TAG											= GameProvider.class
-																								.getName();
+	private static final String				TAG											= GameProvider.class.getName();
 
 	private static HashMap<String, String>	sGamesProjectionMap;
 	static {
 		sGamesProjectionMap = new HashMap<String, String>();
 
-		sGamesProjectionMap.put(GameTableMetaData._ID, GameTableMetaData._ID);
+		sGamesProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
 
-		sGamesProjectionMap.put(GameTableMetaData.GAME_NAME,
-				GameTableMetaData.GAME_NAME);
+		sGamesProjectionMap.put(GameTableMetaData.GAME_NAME, GameTableMetaData.GAME_NAME);
 
-		sGamesProjectionMap.put(GameTableMetaData.GAME_SAVE_DATE,
-				GameTableMetaData.GAME_SAVE_DATE);
+		sGamesProjectionMap.put(GameTableMetaData.GAME_SAVE_DATE, GameTableMetaData.GAME_SAVE_DATE);
 
-		sGamesProjectionMap.put(GameTableMetaData.GAME_TURNS,
-				GameTableMetaData.GAME_TURNS);
+		sGamesProjectionMap.put(GameTableMetaData.GAME_TURNS, GameTableMetaData.GAME_TURNS);
 
-		sGamesProjectionMap.put(GameTableMetaData.GAME_START_DATE,
-				GameTableMetaData.GAME_START_DATE);
+		sGamesProjectionMap.put(GameTableMetaData.GAME_START_DATE, GameTableMetaData.GAME_START_DATE);
 
-		sGamesProjectionMap.put(GameTableMetaData.GAME_PLAYER,
-				GameTableMetaData.GAME_PLAYER);
+		sGamesProjectionMap.put(GameTableMetaData.GAME_PLAYER, GameTableMetaData.GAME_PLAYER);
 	}
 
 	private static final UriMatcher			sUriMatcher;
@@ -58,13 +55,9 @@ public class GameProvider extends ContentProvider {
 
 	static {
 		sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		sUriMatcher.addURI(GameProviderMetaData.AUTHORITY,
-				GameTableMetaData.TABLE_NAME,
-				INCOMINING_GAME_COLLECTION_URI_INDICATOR);
+		sUriMatcher.addURI(GameProviderMetaData.AUTHORITY, GameTableMetaData.TABLE_NAME, INCOMINING_GAME_COLLECTION_URI_INDICATOR);
 
-		sUriMatcher.addURI(GameProviderMetaData.AUTHORITY,
-				GameTableMetaData.TABLE_NAME + "/#",
-				INCOMINING_SINGLE_GAME_URI_INDICATOR);
+		sUriMatcher.addURI(GameProviderMetaData.AUTHORITY, GameTableMetaData.TABLE_NAME + "/#", INCOMINING_SINGLE_GAME_URI_INDICATOR);
 	}
 
 	private static class GameDatabaseHelper extends SQLiteOpenHelper {
@@ -72,8 +65,7 @@ public class GameProvider extends ContentProvider {
 		private static final String	UPGRADE_INTERNAL_DATABASE	= "Upgrade internal database from %d to %d - all old data are removed.";
 
 		public GameDatabaseHelper(Context context) {
-			super(context, GameProviderMetaData.DATABASE_NAME, null,
-					GameProviderMetaData.DATABASE_VERSION);
+			super(context, GameProviderMetaData.DATABASE_NAME, null, GameProviderMetaData.DATABASE_VERSION);
 		}
 
 		@Override
@@ -99,9 +91,7 @@ public class GameProvider extends ContentProvider {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.d(TAG, "Inner onUpgrade called");
 
-			Log.w(TAG, String.format(
-					GameDatabaseHelper.UPGRADE_INTERNAL_DATABASE, oldVersion,
-					newVersion));
+			Log.w(TAG, String.format(GameDatabaseHelper.UPGRADE_INTERNAL_DATABASE, oldVersion, newVersion));
 
 			final String dropTableCmd = GameTableMetaData.DROP_TABLE_CMD;
 			try {
@@ -121,24 +111,21 @@ public class GameProvider extends ContentProvider {
 
 		switch (sUriMatcher.match(uri)) {
 		case INCOMINING_GAME_COLLECTION_URI_INDICATOR:
-			count = db.delete(GameTableMetaData.TABLE_NAME, initialSelection,
-					selectionArgs);
+			count = db.delete(GameTableMetaData.TABLE_NAME, initialSelection, selectionArgs);
 			break;
 
 		case INCOMINING_SINGLE_GAME_URI_INDICATOR:
 			String rowId = uri.getPathSegments().get(1);
-			String selection = GameTableMetaData._ID + "=" + rowId;
+			String selection = BaseColumns._ID + "=" + rowId;
 			if (TextUtils.isEmpty(initialSelection) == false) {
 				selection += " AND " + initialSelection;
 			}
 
-			count = db.delete(GameTableMetaData.TABLE_NAME, selection,
-					selectionArgs);
+			count = db.delete(GameTableMetaData.TABLE_NAME, selection, selectionArgs);
 			break;
 
 		default:
-			throw new IllegalArgumentException(String.format(
-					GameProvider.UNKNOWN_URI_ERROR, uri));
+			throw new IllegalArgumentException(String.format(GameProvider.UNKNOWN_URI_ERROR, uri));
 		}
 
 		getContext().getContentResolver().notifyChange(uri, null);
@@ -156,16 +143,14 @@ public class GameProvider extends ContentProvider {
 			return GameTableMetaData.CONTENT_ITEM_TYPE;
 
 		default:
-			throw new IllegalArgumentException(String.format(
-					GameProvider.UNKNOWN_URI_ERROR, uri));
+			throw new IllegalArgumentException(String.format(GameProvider.UNKNOWN_URI_ERROR, uri));
 		}
 	}
 
 	@Override
 	public Uri insert(Uri uri, ContentValues initialValues) {
 		if (sUriMatcher.match(uri) != INCOMINING_GAME_COLLECTION_URI_INDICATOR) {
-			throw new IllegalArgumentException(String.format(
-					GameProvider.UNKNOWN_URI_ERROR, uri));
+			throw new IllegalArgumentException(String.format(GameProvider.UNKNOWN_URI_ERROR, uri));
 		}
 
 		ContentValues values;
@@ -196,34 +181,26 @@ public class GameProvider extends ContentProvider {
 		values.put(GameTableMetaData.GAME_TURNS, 0);
 
 		if (values.containsKey(GameTableMetaData.GAME_NAME) == false) {
-			throw new SQLException(String.format(
-					GameProvider.EMPTY_REQUIRED_FIELD_ERROR,
-					GameTableMetaData.GAME_NAME));
+			throw new SQLException(String.format(GameProvider.EMPTY_REQUIRED_FIELD_ERROR, GameTableMetaData.GAME_NAME));
 		}
 
 		if (values.containsKey(GameTableMetaData.GAME_PLAYER) == false) {
-			throw new SQLException(String.format(
-					GameProvider.EMPTY_REQUIRED_FIELD_ERROR,
-					GameTableMetaData.GAME_PLAYER));
+			throw new SQLException(String.format(GameProvider.EMPTY_REQUIRED_FIELD_ERROR, GameTableMetaData.GAME_PLAYER));
 		}
 
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 
-		long rowId = db.insertOrThrow(GameTableMetaData.TABLE_NAME,
-				GameTableMetaData.GAME_NAME, values);
+		long rowId = db.insertOrThrow(GameTableMetaData.TABLE_NAME, GameTableMetaData.GAME_NAME, values);
 
 		if (rowId > 0) {
-			Uri insertedGameUri = ContentUris.withAppendedId(
-					GameTableMetaData.CONTENT_URI, rowId);
+			Uri insertedGameUri = ContentUris.withAppendedId(GameTableMetaData.CONTENT_URI, rowId);
 
-			getContext().getContentResolver().notifyChange(insertedGameUri,
-					null);
+			getContext().getContentResolver().notifyChange(insertedGameUri, null);
 
 			return insertedGameUri;
 		}
 
-		throw new SQLException(String.format(
-				GameProvider.FAIL_INSERT_ROW_ERROR, uri));
+		throw new SQLException(String.format(GameProvider.FAIL_INSERT_ROW_ERROR, uri));
 	}
 
 	private GameDatabaseHelper	mDatabaseHelper;
@@ -236,8 +213,7 @@ public class GameProvider extends ContentProvider {
 	}
 
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
 		qb.setTables(GameTableMetaData.TABLE_NAME);
@@ -248,12 +224,10 @@ public class GameProvider extends ContentProvider {
 			// Default query
 			break;
 		case INCOMINING_SINGLE_GAME_URI_INDICATOR:
-			qb.appendWhere(GameTableMetaData._ID + "="
-					+ uri.getPathSegments().get(1));
+			qb.appendWhere(BaseColumns._ID + "=" + uri.getPathSegments().get(1));
 			break;
 		default:
-			throw new IllegalArgumentException(String.format(
-					GameProvider.UNKNOWN_URI_ERROR, uri));
+			throw new IllegalArgumentException(String.format(GameProvider.UNKNOWN_URI_ERROR, uri));
 		}
 
 		String orderBy = GameTableMetaData.DEFAULT_SORT_ORDER;
@@ -263,8 +237,7 @@ public class GameProvider extends ContentProvider {
 
 		SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
 
-		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
-				null, orderBy);
+		Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
 
 		if (c != null) {
 			c.setNotificationUri(getContext().getContentResolver(), uri);
@@ -275,8 +248,7 @@ public class GameProvider extends ContentProvider {
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String initialSelection,
-			String[] selectionArgs) {
+	public int update(Uri uri, ContentValues values, String initialSelection, String[] selectionArgs) {
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 
 		int count;
@@ -290,24 +262,21 @@ public class GameProvider extends ContentProvider {
 
 		switch (sUriMatcher.match(uri)) {
 		case INCOMINING_GAME_COLLECTION_URI_INDICATOR:
-			count = db.update(GameTableMetaData.TABLE_NAME, values,
-					initialSelection, selectionArgs);
+			count = db.update(GameTableMetaData.TABLE_NAME, values, initialSelection, selectionArgs);
 			break;
 
 		case INCOMINING_SINGLE_GAME_URI_INDICATOR:
 			String rowId = uri.getPathSegments().get(1);
-			String selection = GameTableMetaData._ID + "=" + rowId;
+			String selection = BaseColumns._ID + "=" + rowId;
 			if (TextUtils.isEmpty(initialSelection) == false) {
 				selection += " AND " + initialSelection;
 			}
 
-			count = db.update(GameTableMetaData.TABLE_NAME, values, selection,
-					selectionArgs);
+			count = db.update(GameTableMetaData.TABLE_NAME, values, selection, selectionArgs);
 			break;
 
 		default:
-			throw new IllegalArgumentException(String.format(
-					GameProvider.UNKNOWN_URI_ERROR, uri));
+			throw new IllegalArgumentException(String.format(GameProvider.UNKNOWN_URI_ERROR, uri));
 		}
 
 		getContext().getContentResolver().notifyChange(uri, null);

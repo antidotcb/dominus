@@ -1,10 +1,10 @@
 package ua.org.antidotcb.dominus.engine;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import android.util.Log;
 import android.util.Pair;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Universe {
 	public Universe() {
@@ -23,23 +23,19 @@ public class Universe {
 
 	public void AddLinks(Universe result) {
 		ArrayList<StarSystem> unlinked = new ArrayList<StarSystem>(starSystems);
-		ArrayList<StarSystem> linked = new ArrayList<StarSystem>(starSystems
-				.size());
+		ArrayList<StarSystem> linked = new ArrayList<StarSystem>(starSystems.size());
 
 		Random rand = new Random();
 
 		int randomLinksCount;
 		if (starSystems.size() > 4) {
-			randomLinksCount = rand.nextInt(starSystems.size() / 4)
-					+ starSystems.size() / 10;
+			randomLinksCount = rand.nextInt(starSystems.size() / 4) + starSystems.size() / 10;
 		} else
 			randomLinksCount = 0;
 
-		Log.i(Engine.eTag, String.format("Additional links to be created: %d",
-				randomLinksCount));
+		Log.i(Engine.eTag, String.format("Additional links to be created: %d", randomLinksCount));
 
-		links = new ArrayList<Pair<StarSystem, StarSystem>>(unlinked.size() + 1
-				+ randomLinksCount);
+		links = new ArrayList<Pair<StarSystem, StarSystem>>(unlinked.size() + 1 + randomLinksCount);
 
 		do {
 			StarSystem linkFirstStarSystem = null;
@@ -61,12 +57,10 @@ public class Universe {
 				do {
 					int linkSecondId = rand.nextInt(starSystems.size());
 					linkSecondStarSystem = starSystems.get(linkSecondId);
-				} while (linkSecondStarSystem.getId() == linkFirstStarSystem
-						.getId());
+				} while (linkSecondStarSystem.getId() == linkFirstStarSystem.getId());
 			}
 
-			Pair<StarSystem, StarSystem> link = new Pair<StarSystem, StarSystem>(
-					linkFirstStarSystem, linkSecondStarSystem);
+			Pair<StarSystem, StarSystem> link = new Pair<StarSystem, StarSystem>(linkFirstStarSystem, linkSecondStarSystem);
 			if (unlinked.contains(linkFirstStarSystem)) {
 				unlinked.remove(linkFirstStarSystem);
 			}
@@ -84,28 +78,25 @@ public class Universe {
 			}
 
 			links.add(link);
-			Log.i(Engine.eTag, String.format("Link between %d and %d created",
-					link.first.getId(), link.second.getId()));
+			Log.i(Engine.eTag, String.format("Link between %d and %d created", link.first.getId(), link.second.getId()));
 		} while ((unlinked.size() > 0) || (randomLinksCount > 0));
 	}
 
-	private int getClosestIndex(ArrayList<StarSystem> starSystems,
-			StarSystem from) {
+	private int getClosestIndex(ArrayList<StarSystem> starSystems, StarSystem from) {
 		float minDistance = Float.MAX_VALUE;
 		int index = 0, result = -1;
 		for (StarSystem star : starSystems) {
-			
-			if(star == from)
+
+			if (star == from)
 				continue;
-			
+
 			float currentDistance = Engine.getDistance(from, star);
-			
-			if(currentDistance <= minDistance)
-			{
+
+			if (currentDistance <= minDistance) {
 				result = index;
 				minDistance = currentDistance;
 			}
-			
+
 			index++;
 		}
 		return result;
@@ -119,7 +110,7 @@ public class Universe {
 		return links;
 	}
 
-	private ArrayList<StarSystem> starSystems;
-	private ArrayList<Pair<StarSystem, StarSystem>> links;
+	private ArrayList<StarSystem>					starSystems;
+	private ArrayList<Pair<StarSystem, StarSystem>>	links;
 
 }

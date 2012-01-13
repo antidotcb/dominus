@@ -12,21 +12,16 @@ public class GameProviderMetaData {
 	public static final String	DATABASE_NAME		= "game.db";
 	public static final int		DATABASE_VERSION	= 1;
 
-	// public static final String GAMES_TABLE_NAME = "games";
-
 	public static final class GameTableMetaData implements BaseColumns {
 
 		private GameTableMetaData() {}
 
 		public static final String	TABLE_NAME			= "games";
-		public static final Uri		CONTENT_URI			= Uri.parse("content://"
-																		+ AUTHORITY);
+		public static final Uri		CONTENT_URI			= Uri.parse("content://" + AUTHORITY);
 
-		public static final String	CONTENT_TYPE		= ContentResolver.CURSOR_DIR_BASE_TYPE
-																		+ "/vnd.antidotcb.dominus.game";
+		public static final String	CONTENT_TYPE		= ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.antidotcb.dominus.game";
 
-		public static final String	CONTENT_ITEM_TYPE	= ContentResolver.CURSOR_ITEM_BASE_TYPE
-																		+ "/vnd.antidotcb.dominus.game";
+		public static final String	CONTENT_ITEM_TYPE	= ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.antidotcb.dominus.game";
 
 		// Columns definition begin
 		public static final String	GAME_NAME			= "name";
@@ -53,16 +48,10 @@ public class GameProviderMetaData {
 
 		private static final String	DEFAULT_INDEX		= "default";
 
-		public static final String	CREATE_TABLE_CMD	= String.format(SQLiteStatements.CREATE_TABLE_CMD,
-																		TABLE_NAME,
-																		COLUMN_DEFINITION);
+		public static final String	CREATE_TABLE_CMD	= String.format(SQLiteStatements.CREATE_TABLE_CMD, TABLE_NAME, COLUMN_DEFINITION);
 
-		public static final String	DROP_TABLE_CMD		= String.format(SQLiteStatements.DROP_TABLE_CMD,
-																		TABLE_NAME);
+		public static final String	DROP_TABLE_CMD		= String.format(SQLiteStatements.DROP_TABLE_CMD, TABLE_NAME);
 
-		public static final String	CREATE_INDEX_CMD	= String.format(SQLiteStatements.CREATE_INDEX_CMD,
-																		DEFAULT_INDEX,
-																		TABLE_NAME,
-																		SORT_COLUMN);
+		public static final String	CREATE_INDEX_CMD	= String.format(SQLiteStatements.CREATE_INDEX_CMD, DEFAULT_INDEX, TABLE_NAME, SORT_COLUMN);
 	}
 }

@@ -1,14 +1,14 @@
 package ua.org.antidotcb.dominus.engine;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import android.graphics.Color;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class StarSystem implements IPosition {
 
-	private static short StarSystemID = 0;
+	private static short	StarSystemID	= 0;
 
 	public StarSystem() {
 		Log.i(Engine.eTag, this.getClass() + " created.");
@@ -25,15 +25,13 @@ public class StarSystem implements IPosition {
 		x = w * Math.cos(t);
 		y = w * Math.sin(t);
 
-		Log.i(Engine.eTag, String.format(
-				"Coords generation: t=%f w=%f x=%f y=%f z=%f ", t, w, x, y, z));
+		Log.i(Engine.eTag, String.format("Coords generation: t=%f w=%f x=%f y=%f z=%f ", t, w, x, y, z));
 
 		this.x = (float) x;
 		this.y = (float) y;
 		this.z = (float) z;
 
-		color = Color.argb(255, rand.nextInt(128) + 128,
-				rand.nextInt(128) + 128, rand.nextInt(128) + 128);
+		color = Color.argb(255, rand.nextInt(128) + 128, rand.nextInt(128) + 128, rand.nextInt(128) + 128);
 	}
 
 	public Star getStar() {
@@ -64,12 +62,12 @@ public class StarSystem implements IPosition {
 		return id;
 	}
 
-	private Star star;
-	private ArrayList<Planet> planets;
-	private final float x;
-	private final float y;
-	private final float z;
-	private final int color;
-	private final short id;
+	private Star				star;
+	private ArrayList<Planet>	planets;
+	private final float			x;
+	private final float			y;
+	private final float			z;
+	private final int			color;
+	private final short			id;
 
 }

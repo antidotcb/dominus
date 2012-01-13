@@ -1,5 +1,6 @@
 package ua.org.antidotcb.dominus;
 
+import ua.org.antidotcb.dominus.engine.NativeHelper;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData.GameTableMetaData;
 
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +22,9 @@ import android.widget.Toast;
 public class MenuActivity extends Activity implements OnClickListener {
 
 	public void onClick(View v) {
+
+		new NativeHelper();
+
 		int id = v.getId();
 
 		ContentValues values;
@@ -108,13 +113,13 @@ public class MenuActivity extends Activity implements OnClickListener {
 		case R.id.mm_savegame:
 
 			values = new ContentValues();
-			
+
 			values.put(GameTableMetaData.GAME_PLAYER, 5);
 
-			String where = GameTableMetaData._ID + "=?"; 
-			String[] selectionArgs = new String[]{"3"};
+			String where = BaseColumns._ID + "=?";
+			String[] selectionArgs = new String[] { "3" };
 			cr.update(uri, values, where, selectionArgs);
-			
+
 			break;
 
 		case R.id.mm_exitgame:

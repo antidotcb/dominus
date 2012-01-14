@@ -1,6 +1,6 @@
 package ua.org.antidotcb.dominus;
 
-import ua.org.antidotcb.dominus.engine.NativeHelper;
+import ua.org.antidotcb.dominus.engine.QuaternionNativeHelper;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData.GameTableMetaData;
 
@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,13 +22,13 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 	public void onClick(View v) {
 
-		new NativeHelper();
+		new QuaternionNativeHelper();
 
 		int id = v.getId();
 
 		ContentValues values;
 		ContentResolver cr = getContentResolver();
-		Uri uri = Uri.withAppendedPath(GameProviderMetaData.GameTableMetaData.CONTENT_URI, GameTableMetaData.TABLE_NAME);
+		Uri uri = Uri.withAppendedPath(GameProviderMetaData.GameTableMetaData.CONTENT_URI, GameTableMetaData._TABLE_NAME);
 		final Button btn = (Button) findViewById(id);
 
 		if (btn != null)
@@ -45,23 +44,23 @@ public class MenuActivity extends Activity implements OnClickListener {
 			values = new ContentValues();
 			Uri insertedUri;
 
-			values.put(GameTableMetaData.GAME_NAME, "The first one");
-			values.put(GameTableMetaData.GAME_PLAYER, 1);
+			values.put(GameTableMetaData.COLUMN_NAME, "The first one");
+			values.put(GameTableMetaData.COLUMN_PLAYERID, 1);
 			insertedUri = cr.insert(uri, values);
 			Log.d(TAG, insertedUri.toString());
 
-			values.put(GameTableMetaData.GAME_NAME, "Number two");
-			values.put(GameTableMetaData.GAME_PLAYER, 2);
+			values.put(GameTableMetaData.COLUMN_NAME, "Number two");
+			values.put(GameTableMetaData.COLUMN_PLAYERID, 2);
 			insertedUri = cr.insert(uri, values);
 			Log.d(TAG, insertedUri.toString());
 
-			values.put(GameTableMetaData.GAME_NAME, "Third one");
-			values.put(GameTableMetaData.GAME_PLAYER, 3);
+			values.put(GameTableMetaData.COLUMN_NAME, "Third one");
+			values.put(GameTableMetaData.COLUMN_PLAYERID, 3);
 			insertedUri = cr.insert(uri, values);
 			Log.d(TAG, insertedUri.toString());
 
-			values.put(GameTableMetaData.GAME_NAME, "Last try");
-			values.put(GameTableMetaData.GAME_PLAYER, 4);
+			values.put(GameTableMetaData.COLUMN_NAME, "Last try");
+			values.put(GameTableMetaData.COLUMN_PLAYERID, 4);
 			insertedUri = cr.insert(uri, values);
 			Log.d(TAG, insertedUri.toString());
 
@@ -71,11 +70,11 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 			Cursor c = managedQuery(uri, null, null, null, null);
 
-			int iname = c.getColumnIndex(GameTableMetaData.GAME_NAME);
-			int iplayer = c.getColumnIndex(GameTableMetaData.GAME_PLAYER);
-			int imodified = c.getColumnIndex(GameTableMetaData.GAME_SAVE_DATE);
-			int istart = c.getColumnIndex(GameTableMetaData.GAME_START_DATE);
-			int iturns = c.getColumnIndex(GameTableMetaData.GAME_TURNS);
+			int iname = c.getColumnIndex(GameTableMetaData.COLUMN_NAME);
+			int iplayer = c.getColumnIndex(GameTableMetaData.COLUMN_PLAYERID);
+			int imodified = c.getColumnIndex(GameTableMetaData.COLUMN_MODIFIED);
+			int istart = c.getColumnIndex(GameTableMetaData.COLUMN_CREATED);
+			int iturns = c.getColumnIndex(GameTableMetaData.COLUMN_LENGTH);
 
 			Log.d(TAG, "iname =" + iname);
 			Log.d(TAG, "iplayer =" + iplayer);
@@ -114,9 +113,9 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 			values = new ContentValues();
 
-			values.put(GameTableMetaData.GAME_PLAYER, 5);
+			values.put(GameTableMetaData.COLUMN_PLAYERID, 5);
 
-			String where = BaseColumns._ID + "=?";
+			String where = GameTableMetaData._ID + "=?";
 			String[] selectionArgs = new String[] { "3" };
 			cr.update(uri, values, where, selectionArgs);
 

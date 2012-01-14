@@ -6,52 +6,50 @@ import android.provider.BaseColumns;
 
 public class GameProviderMetaData {
 
-	private GameProviderMetaData() {}
-
-	public static final String	AUTHORITY			= "ua.org.antidotcb.dominus.model.GameProvider";
-	public static final String	DATABASE_NAME		= "game.db";
-	public static final int		DATABASE_VERSION	= 1;
-
 	public static final class GameTableMetaData implements BaseColumns {
 
-		private GameTableMetaData() {}
-
-		public static final String	TABLE_NAME			= "games";
-		public static final Uri		CONTENT_URI			= Uri.parse("content://" + AUTHORITY);
-
-		public static final String	CONTENT_TYPE		= ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.antidotcb.dominus.game";
-
-		public static final String	CONTENT_ITEM_TYPE	= ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.antidotcb.dominus.game";
+		public static final String		_TABLE_NAME			= "games";
 
 		// Columns definition begin
-		public static final String	GAME_NAME			= "name";
-		public static final String	GAME_START_DATE		= "created";
-		public static final String	GAME_TURNS			= "turns";
-		public static final String	GAME_SAVE_DATE		= "modified";
-		public static final String	GAME_PLAYER			= "player";
+
+		public static final String		COLUMN_CREATED		= "created";
+		public static final String		COLUMN_LENGTH		= "turns";
+		public static final String		COLUMN_MODIFIED		= "modified";
+		public static final String		COLUMN_NAME			= "name";
+		public static final String		COLUMN_PLAYERID		= "player";
+
 		// @formatter:off
-		private static final String COLUMN_DEFINITION = 
-				  _ID				+ " INTEGER PRIMARY KEY," 
-				+ GAME_NAME			+ " TEXT," 
-				+ GAME_SAVE_DATE	+ " INTEGER,"
-				+ GAME_START_DATE	+ " INTEGER,"
-				+ GAME_TURNS		+ " INTEGER,"
-				+ GAME_PLAYER		+ " INTEGER";
+		private static final String COLUMNS_DEFINITION = 
+				  _ID				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
+				+ COLUMN_NAME		+ " TEXT," 
+				+ COLUMN_MODIFIED	+ " INTEGER,"
+				+ COLUMN_CREATED	+ " INTEGER,"
+				+ COLUMN_LENGTH		+ " INTEGER,"
+				+ COLUMN_PLAYERID	+ " INTEGER";
 		// @formatter:on
 		// Columns definition end
+		public static final String		CONTENT_ITEM_TYPE	= ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.antidotcb.dominus.game";
+		public static final String		CONTENT_TYPE		= ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.antidotcb.dominus.game";
+		public static final Uri			CONTENT_URI			= Uri.parse("content://" + AUTHORITY);
 
-		private static final String	SORT_COLUMN			= GAME_SAVE_DATE;
-		public static final String	DEFAULT_SORT_ORDER	= SORT_COLUMN + "DESC";
+		private static final String		DEFAULT_INDEX		= "default";
 
-		public static final String	ALPHABETICALLY		= GAME_NAME;
-		public static final String	OLDEST_FIRST		= GAME_START_DATE;
+		private static final String		SORT_COLUMN			= COLUMN_MODIFIED;
 
-		private static final String	DEFAULT_INDEX		= "default";
+		public static final String		SORT_DEFAULT		= SORT_COLUMN + "DESC";
 
-		public static final String	CREATE_TABLE_CMD	= String.format(SQLiteStatements.CREATE_TABLE_CMD, TABLE_NAME, COLUMN_DEFINITION);
+		protected static final String	SQL_CREATE_INDEX	= String.format(SQLiteStatements.CREATE_INDEX_CMD, DEFAULT_INDEX, _TABLE_NAME, SORT_COLUMN);
 
-		public static final String	DROP_TABLE_CMD		= String.format(SQLiteStatements.DROP_TABLE_CMD, TABLE_NAME);
+		protected static final String	SQL_CREATE_TABLE	= String.format(SQLiteStatements.CREATE_TABLE_CMD, _TABLE_NAME, COLUMNS_DEFINITION);
 
-		public static final String	CREATE_INDEX_CMD	= String.format(SQLiteStatements.CREATE_INDEX_CMD, DEFAULT_INDEX, TABLE_NAME, SORT_COLUMN);
+		protected static final String	SQL_DROP_TABLE		= String.format(SQLiteStatements.DROP_TABLE_CMD, _TABLE_NAME);
+
+		private GameTableMetaData() {}
 	}
+
+	public static final String		AUTHORITY			= "ua.org.antidotcb.dominus.model.GameProvider";
+	protected static final String	DATABASE_NAME		= "game.db";
+	protected static final int		DATABASE_VERSION	= 2;
+
+	private GameProviderMetaData() {}
 }

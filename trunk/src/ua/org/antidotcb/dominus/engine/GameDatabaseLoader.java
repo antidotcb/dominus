@@ -22,6 +22,10 @@ public class GameDatabaseLoader implements GameDataProvider {
 		cursor = cr.query(uri, null, null, null, null);
 	}
 
+	public void Close() {
+		cursor.close();
+	}
+
 	public ArrayList<Race> getRaces() {
 		return null;
 	}
@@ -34,10 +38,6 @@ public class GameDatabaseLoader implements GameDataProvider {
 	public void Save() {
 		// TODO Auto-generated method stub
 
-	}
-
-	public void Close() {
-		cursor.close();
 	}
 
 }

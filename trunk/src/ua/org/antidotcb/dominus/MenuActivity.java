@@ -1,6 +1,7 @@
 package ua.org.antidotcb.dominus;
 
-import ua.org.antidotcb.dominus.engine.QuaternionNativeHelper;
+import ua.org.antidotcb.dominus.engine.NativeQuatUtils;
+import ua.org.antidotcb.dominus.engine.Quaternion;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData.GameTableMetaData;
 
@@ -22,13 +23,16 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 	public void onClick(View v) {
 
-		new QuaternionNativeHelper();
+		Quaternion q = new Quaternion();
+		NativeQuatUtils.normalizeQuaternion(q);
 
 		int id = v.getId();
 
 		ContentValues values;
 		ContentResolver cr = getContentResolver();
-		Uri uri = Uri.withAppendedPath(GameProviderMetaData.GameTableMetaData.CONTENT_URI, GameTableMetaData._TABLE_NAME);
+		Uri uri = Uri.withAppendedPath(
+				GameProviderMetaData.GameTableMetaData.CONTENT_URI,
+				GameTableMetaData._TABLE_NAME);
 		final Button btn = (Button) findViewById(id);
 
 		if (btn != null)
@@ -37,7 +41,8 @@ public class MenuActivity extends Activity implements OnClickListener {
 		switch (id) {
 		case R.id.mm_newgame:
 
-			String action = getResources().getString(R.string.intent_displaymain);
+			String action = getResources().getString(
+					R.string.intent_displaymain);
 			Intent intent = new Intent(action);
 			this.startActivity(intent);
 
@@ -149,5 +154,17 @@ public class MenuActivity extends Activity implements OnClickListener {
 		btn.setOnClickListener(this);
 	}
 
-	private static final String	TAG	= MenuActivity.class.getName();
+	private static final String TAG = MenuActivity.class.getName();
+
+	static {
+		try {
+			System.loadLibrary("quaternion");
+		} catch (UnsatisfiedLinkError e) {
+			Log.d("ERROR", "UnsatisfiedLinkError", e);
+			System.exit(-1);
+		} catch (Exception e) {
+			Log.d("ERROR", "Exception", e);
+			System.exit(-1);
+		}
+	}
 }

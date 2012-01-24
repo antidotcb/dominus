@@ -2,7 +2,6 @@ package ua.org.antidotcb.dominus;
 
 import ua.org.antidotcb.dominus.engine.NativeQuatUtils;
 import ua.org.antidotcb.dominus.engine.Quaternion;
-import ua.org.antidotcb.dominus.model.GameProviderMetaData;
 import ua.org.antidotcb.dominus.model.GameProviderMetaData.GameTableMetaData;
 
 import android.app.Activity;
@@ -13,6 +12,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,9 +30,8 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 		ContentValues values;
 		ContentResolver cr = getContentResolver();
-		Uri uri = Uri.withAppendedPath(
-				GameProviderMetaData.GameTableMetaData.CONTENT_URI,
-				GameTableMetaData._TABLE_NAME);
+
+		Uri uri = GameTableMetaData.getInstance().getContentUri();
 		final Button btn = (Button) findViewById(id);
 
 		if (btn != null)
@@ -41,8 +40,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		switch (id) {
 		case R.id.mm_newgame:
 
-			String action = getResources().getString(
-					R.string.intent_displaymain);
+			String action = getResources().getString(R.string.intent_displaymain);
 			Intent intent = new Intent(action);
 			this.startActivity(intent);
 
@@ -120,7 +118,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 
 			values.put(GameTableMetaData.COLUMN_PLAYERID, 5);
 
-			String where = GameTableMetaData._ID + "=?";
+			String where = BaseColumns._ID + "=?";
 			String[] selectionArgs = new String[] { "3" };
 			cr.update(uri, values, where, selectionArgs);
 
@@ -154,7 +152,7 @@ public class MenuActivity extends Activity implements OnClickListener {
 		btn.setOnClickListener(this);
 	}
 
-	private static final String TAG = MenuActivity.class.getName();
+	private static final String	TAG	= MenuActivity.class.getName();
 
 	static {
 		try {

@@ -15,7 +15,7 @@ public class GameDatabaseLoader implements GameDataProvider {
 
 	public GameDatabaseLoader(Context content, Uri initialUri) {
 		ContentResolver cr = content.getContentResolver();
-		Uri uri = GameTableMetaData.CONTENT_URI;
+		Uri uri = GameTableMetaData.getInstance().getContentUri();
 		if (initialUri != null) {
 			uri = initialUri;
 		}

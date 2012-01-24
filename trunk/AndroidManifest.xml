@@ -31,8 +31,8 @@
         </activity>
 
         <provider
-            android:name=".model.GameProvider"
-            android:authorities="ua.org.antidotcb.dominus.model.GameProvider" >
+            android:name=".model.DominusProvider"
+            android:authorities="ua.org.antidotcb.dominus.model.GameProvider" android:exported="false" android:label="Dominus game internal">
         </provider>
     </application>
 

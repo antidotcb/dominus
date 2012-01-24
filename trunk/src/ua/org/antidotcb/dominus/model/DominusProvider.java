@@ -13,25 +13,26 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.HashMap;
 
-public class GameProvider extends ContentProvider {
+public class DominusProvider extends ContentProvider {
 
 	private static class GameDatabaseHelper extends SQLiteOpenHelper {
 
 		public GameDatabaseHelper(Context context) {
-			super(context, GameProviderMetaData.DATABASE_NAME, null, GameProviderMetaData.DATABASE_VERSION);
+			super(context, DominusProviderMetaData.DATABASE_NAME, null, DominusProviderMetaData.DATABASE_VERSION);
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			Log.d(_TAG, "Inner onCreate called");
 
-			final String createTableCmd = GameTableMetaData.SQL_CREATE_TABLE;
-			final String createIndexCmd = GameTableMetaData.SQL_CREATE_INDEX;
+			final String createTableCmd = GameTableMetaData.getInstance().getSqlCreateTable();
+			final String createIndexCmd = GameTableMetaData.getInstance().getSqlCreateIndex();
 			try {
 				db.execSQL(createTableCmd);
 
@@ -51,7 +52,7 @@ public class GameProvider extends ContentProvider {
 
 			Log.w(_TAG, String.format(GameDatabaseHelper.UPGRADE_INTERNAL_DATABASE, oldVersion, newVersion));
 
-			final String dropTableCmd = GameTableMetaData.SQL_DROP_TABLE;
+			final String dropTableCmd = GameTableMetaData.getInstance().getSqlDropTable();
 			try {
 				db.execSQL(dropTableCmd);
 			} catch (SQLException e) {
@@ -71,21 +72,21 @@ public class GameProvider extends ContentProvider {
 
 		switch (sMatcher.match(uri)) {
 		case FORMAT_GAME_COLLECTION_URI:
-			count = db.delete(GameTableMetaData._TABLE_NAME, initialSelection, selectionArgs);
+			count = db.delete(GameTableMetaData.getInstance().getTableName(), initialSelection, selectionArgs);
 			break;
 
 		case FORMAT_SINGLE_GAME_URI:
 			String rowId = uri.getPathSegments().get(1);
-			String selection = GameTableMetaData._ID + "=" + rowId;
+			String selection = BaseColumns._ID + "=" + rowId;
 			if (TextUtils.isEmpty(initialSelection) == false) {
 				selection += " AND " + initialSelection;
 			}
 
-			count = db.delete(GameTableMetaData._TABLE_NAME, selection, selectionArgs);
+			count = db.delete(GameTableMetaData.getInstance().getTableName(), selection, selectionArgs);
 			break;
 
 		default:
-			throw new IllegalArgumentException(String.format(GameProvider.STR_ERR_UNKNOWN_URI, uri));
+			throw new IllegalArgumentException(String.format(DominusProvider.STR_ERR_UNKNOWN_URI, uri));
 		}
 
 		getContext().getContentResolver().notifyChange(uri, null);
@@ -97,20 +98,20 @@ public class GameProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch (sMatcher.match(uri)) {
 		case FORMAT_GAME_COLLECTION_URI:
-			return GameTableMetaData.CONTENT_TYPE;
+			return GameTableMetaData.getInstance().getContentType();
 
 		case FORMAT_SINGLE_GAME_URI:
-			return GameTableMetaData.CONTENT_ITEM_TYPE;
+			return GameTableMetaData.getInstance().getContentItemType();
 
 		default:
-			throw new IllegalArgumentException(String.format(GameProvider.STR_ERR_UNKNOWN_URI, uri));
+			throw new IllegalArgumentException(String.format(DominusProvider.STR_ERR_UNKNOWN_URI, uri));
 		}
 	}
 
 	@Override
 	public Uri insert(Uri uri, ContentValues initialValues) {
 		if (sMatcher.match(uri) != FORMAT_GAME_COLLECTION_URI) {
-			throw new IllegalArgumentException(String.format(GameProvider.STR_ERR_UNKNOWN_URI, uri));
+			throw new IllegalArgumentException(String.format(DominusProvider.STR_ERR_UNKNOWN_URI, uri));
 		}
 
 		ContentValues values;
@@ -141,26 +142,26 @@ public class GameProvider extends ContentProvider {
 		values.put(GameTableMetaData.COLUMN_LENGTH, 0);
 
 		if (values.containsKey(GameTableMetaData.COLUMN_NAME) == false) {
-			throw new SQLException(String.format(GameProvider.STR_ERR_EMPTY_REQUIRED_FIELD, GameTableMetaData.COLUMN_NAME));
+			throw new SQLException(String.format(DominusProvider.STR_ERR_EMPTY_REQUIRED_FIELD, GameTableMetaData.COLUMN_NAME));
 		}
 
 		if (values.containsKey(GameTableMetaData.COLUMN_PLAYERID) == false) {
-			throw new SQLException(String.format(GameProvider.STR_ERR_EMPTY_REQUIRED_FIELD, GameTableMetaData.COLUMN_PLAYERID));
+			throw new SQLException(String.format(DominusProvider.STR_ERR_EMPTY_REQUIRED_FIELD, GameTableMetaData.COLUMN_PLAYERID));
 		}
 
 		SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 
-		long rowId = db.insertOrThrow(GameTableMetaData._TABLE_NAME, GameTableMetaData.COLUMN_NAME, values);
+		long rowId = db.insertOrThrow(GameTableMetaData.getInstance().getTableName(), GameTableMetaData.COLUMN_NAME, values);
 
 		if (rowId > 0) {
-			Uri insertedGameUri = ContentUris.withAppendedId(GameTableMetaData.CONTENT_URI, rowId);
+			Uri insertedGameUri = ContentUris.withAppendedId(GameTableMetaData.getInstance().getContentUri(), rowId);
 
 			getContext().getContentResolver().notifyChange(insertedGameUri, null);
 
 			return insertedGameUri;
 		}
 
-		throw new SQLException(String.format(GameProvider.STR_ERR_FAIL_INSERT_ROW, uri));
+		throw new SQLException(String.format(DominusProvider.STR_ERR_FAIL_INSERT_ROW, uri));
 	}
 
 	@Override
@@ -174,7 +175,7 @@ public class GameProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-		qb.setTables(GameTableMetaData._TABLE_NAME);
+		qb.setTables(GameTableMetaData.getInstance().getTableName());
 		qb.setProjectionMap(sGamesProjection);
 
 		switch (sMatcher.match(uri)) {
@@ -182,13 +183,13 @@ public class GameProvider extends ContentProvider {
 			// Default query
 			break;
 		case FORMAT_SINGLE_GAME_URI:
-			qb.appendWhere(GameTableMetaData._ID + "=" + uri.getPathSegments().get(1));
+			qb.appendWhere(BaseColumns._ID + "=" + uri.getPathSegments().get(1));
 			break;
 		default:
-			throw new IllegalArgumentException(String.format(GameProvider.STR_ERR_UNKNOWN_URI, uri));
+			throw new IllegalArgumentException(String.format(DominusProvider.STR_ERR_UNKNOWN_URI, uri));
 		}
 
-		String orderBy = GameTableMetaData.SORT_DEFAULT;
+		String orderBy = GameTableMetaData.getInstance().getDefaultSort();
 		if (TextUtils.isEmpty(sortOrder)) {
 			orderBy = sortOrder;
 		}
@@ -200,7 +201,7 @@ public class GameProvider extends ContentProvider {
 		if (c != null) {
 			c.setNotificationUri(getContext().getContentResolver(), uri);
 		} else {
-			Log.w(_TAG, GameProvider.STR_WANR_QUERY_RETURN_NULL);
+			Log.w(_TAG, DominusProvider.STR_WANR_QUERY_RETURN_NULL);
 		}
 		return c;
 	}
@@ -220,21 +221,21 @@ public class GameProvider extends ContentProvider {
 
 		switch (sMatcher.match(uri)) {
 		case FORMAT_GAME_COLLECTION_URI:
-			count = db.update(GameTableMetaData._TABLE_NAME, values, initialSelection, selectionArgs);
+			count = db.update(GameTableMetaData.getInstance().getTableName(), values, initialSelection, selectionArgs);
 			break;
 
 		case FORMAT_SINGLE_GAME_URI:
 			String rowId = uri.getPathSegments().get(1);
-			String selection = GameTableMetaData._ID + "=" + rowId;
+			String selection = BaseColumns._ID + "=" + rowId;
 			if (TextUtils.isEmpty(initialSelection) == false) {
 				selection += " AND " + initialSelection;
 			}
 
-			count = db.update(GameTableMetaData._TABLE_NAME, values, selection, selectionArgs);
+			count = db.update(GameTableMetaData.getInstance().getTableName(), values, selection, selectionArgs);
 			break;
 
 		default:
-			throw new IllegalArgumentException(String.format(GameProvider.STR_ERR_UNKNOWN_URI, uri));
+			throw new IllegalArgumentException(String.format(DominusProvider.STR_ERR_UNKNOWN_URI, uri));
 		}
 
 		getContext().getContentResolver().notifyChange(uri, null);
@@ -243,13 +244,13 @@ public class GameProvider extends ContentProvider {
 	}
 
 	// helper TAG for logging
-	private static final String				_TAG							= GameProvider.class.getName();
+	private static final String				_TAG							= DominusProvider.class.getName();
 	private static final int				FORMAT_GAME_COLLECTION_URI		= 1;
 	private static final int				FORMAT_SINGLE_GAME_URI			= 2;
-	
+
 	private static HashMap<String, String>	sGamesProjection;
 	private static final UriMatcher			sMatcher;
-	
+
 	private static final String				STR_ERR_EMPTY_REQUIRED_FIELD	= "Failed to insert row because %d is required field.";
 	private static final String				STR_ERR_FAIL_INSERT_ROW			= "Failed to insert row into %s";
 	private static final String				STR_ERR_UNKNOWN_URI				= "Unknown URI %s";
@@ -258,7 +259,7 @@ public class GameProvider extends ContentProvider {
 	static {
 		sGamesProjection = new HashMap<String, String>();
 
-		sGamesProjection.put(GameTableMetaData._ID, GameTableMetaData._ID);
+		sGamesProjection.put(BaseColumns._ID, BaseColumns._ID);
 		sGamesProjection.put(GameTableMetaData.COLUMN_NAME, GameTableMetaData.COLUMN_NAME);
 		sGamesProjection.put(GameTableMetaData.COLUMN_MODIFIED, GameTableMetaData.COLUMN_MODIFIED);
 		sGamesProjection.put(GameTableMetaData.COLUMN_LENGTH, GameTableMetaData.COLUMN_LENGTH);
@@ -267,8 +268,8 @@ public class GameProvider extends ContentProvider {
 
 		sMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-		sMatcher.addURI(GameProviderMetaData.AUTHORITY, GameTableMetaData._TABLE_NAME, FORMAT_GAME_COLLECTION_URI);
-		sMatcher.addURI(GameProviderMetaData.AUTHORITY, GameTableMetaData._TABLE_NAME + "/#", FORMAT_SINGLE_GAME_URI);
+		sMatcher.addURI(DominusProviderMetaData.AUTHORITY, GameTableMetaData.getInstance().getTableName(), FORMAT_GAME_COLLECTION_URI);
+		sMatcher.addURI(DominusProviderMetaData.AUTHORITY, GameTableMetaData.getInstance().getTableName() + "/#", FORMAT_SINGLE_GAME_URI);
 	}
 
 	private GameDatabaseHelper				mDatabaseHelper;

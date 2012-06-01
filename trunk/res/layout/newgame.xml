@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/newgame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="onBack" >
+
+    <LinearLayout
+        android:id="@+id/mm_prebottomplate"
+        style="@style/mm_plate"
+        android:layout_above="@id/mm_bottomplate" >
+
+        <Button
+            android:id="@+id/ng_age"
+            style="@style/mm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <ImageButton
+            android:id="@+id/ng_density"
+            style="@style/mm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ng_universedensity_cd"
+            android:src="@drawable/ng_density0" 
+            android:onClick="onDensityChange" />
+
+        <Button
+            android:id="@+id/ng_color"
+            style="@style/mm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <ImageButton
+            android:id="@+id/ng_ai"
+            style="@style/mm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ng_universedensity_cd"
+            android:src="@drawable/intel000"
+            android:onClick="onDensityChange"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mm_bottomplate"
+        style="@style/mm_plate"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/ng_back"
+            style="@style/mm_button"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/mm_back" 
+            android:onClick="onBack"/>
+
+        <Button
+            android:id="@+id/ng_randomize"
+            style="@style/mm_button"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="@string/mm_randomize"
+            android:onClick="onRandomize" />
+
+        <Button
+            android:id="@+id/ng_next"
+            style="@style/mm_button"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/mm_next" 
+            android:onClick="onNext"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/ng_raceslist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mm_prebottomplate"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+    </ListView>
+
+</RelativeLayout>

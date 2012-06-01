@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/mm_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/mm_logo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mm_newgame"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/logo" />
+
+    <Button
+        android:id="@+id/mm_newgame"
+        style="@style/mm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mm_loadgame"
+        android:layout_centerHorizontal="true"
+        android:onClick="doNewGame"
+        android:text="@string/mm_newgame" />
+
+    <Button
+        android:id="@+id/mm_loadgame"
+        style="@style/mm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mm_savegame"
+        android:layout_centerHorizontal="true"
+        android:onClick="doLoadGame"
+        android:text="@string/mm_loadgame" />
+
+    <Button
+        android:id="@+id/mm_savegame"
+        style="@style/mm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mm_options"
+        android:layout_centerHorizontal="true"
+        android:onClick="doSaveGame"
+        android:text="@string/mm_savegame" />
+
+    <Button
+        android:id="@+id/mm_options"
+        style="@style/mm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mm_about"
+        android:layout_centerHorizontal="true"
+        android:onClick="doOptions"
+        android:text="@string/mm_options" />
+
+    <Button
+        android:id="@+id/mm_about"
+        style="@style/mm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mm_exitgame"
+        android:layout_centerHorizontal="true"
+        android:onClick="doAbout"
+        android:text="@string/mm_about" />
+
+    <Button
+        android:id="@+id/mm_exitgame"
+        style="@style/mm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="doExitGame"
+        android:text="@string/mm_exitgame" />
+
+</RelativeLayout>

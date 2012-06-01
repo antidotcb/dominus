@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:constantSize="false"
+    android:dither="false"
+    android:variablePadding="false">
+
+	<item android:state_pressed="true"
+	    android:drawable="@drawable/mm_button_bg_pressed"
+	    android:color="@color/mm_btntxtcolor_p" />
+
+	<item android:state_selected="true"
+        android:drawable="@drawable/mm_button_bg_focused" 
+        android:color="@color/mm_btntxtcolor_f" />
+			
+	<item android:state_focused="true"
+        android:drawable="@drawable/mm_button_bg_focused" 
+        android:color="@color/mm_btntxtcolor_f" />
+	
+    <item android:drawable="@drawable/mm_button_bg_normal" 
+        android:color="@color/mm_btntxtcolor_n" />
+</selector>

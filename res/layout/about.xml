@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/mm_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/about_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo" android:contentDescription="@string/about_logo_cd"/>
+
+    <TextView
+        android:id="@+id/about_copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/about_copyright" />
+
+    <TextView
+        android:id="@+id/about_appname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/about_logo"
+        android:layout_centerHorizontal="true"
+        android:text="@string/app_name" />
+
+    <LinearLayout
+        android:id="@+id/about_helperVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/about_appname"
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:id="@+id/about_versionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_Version" />
+
+        <TextView
+            android:id="@+id/about_versionValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_version" />
+    </LinearLayout>
+
+</RelativeLayout>
